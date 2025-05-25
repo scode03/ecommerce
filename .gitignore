@@ -1,0 +1,14 @@
+# Ignore node_modules di semua folder
+**/node_modules/
+
+# Optional: log files
+**/npm-debug.log
+**/yarn-debug.log
+**/yarn-error.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# dotenv (kalau kamu pakai .env)
+**/.env
