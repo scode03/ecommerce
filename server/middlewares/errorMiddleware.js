@@ -9,6 +9,13 @@ export const errorHandler = (err, req, res, next) => {
 
   let message = err.message;
 
+  if (err.name === "ValidationError") {
+    message = Object.values(err.errors)
+      .map((item) => item.message)
+      .join(", ");
+    resStatusCode = 400;
+  }
+
   res.status(resStatusCode).json({
     message,
     stack: err.stack,

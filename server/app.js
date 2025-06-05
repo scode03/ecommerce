@@ -2,13 +2,17 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { notFound, errorHandler } from "../middlewares/errorMiddleware.js";
 import authRouter from "./routes/authRouter.js";
+import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 dotenv.config();
 
 const app = express();
 const port = 3000;
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Parent Router
 app.use("/api/v1/auth", authRouter);
