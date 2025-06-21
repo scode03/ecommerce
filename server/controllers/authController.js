@@ -42,3 +42,48 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   createSendResToken(createUser, 201, res);
 });
+
+export const loginUser = asyncHandler(async (req, res) => {
+  // Create validation
+  if (!req.body.email || !req.body.password) {
+    res.status(400);
+    throw new Error("Email and password cannot be empty.");
+  }
+
+  // Check email address in database
+  const userData = await User.findOne({
+    email: req.body.email,
+  });
+
+  // Check password in database
+  if (userData && (await userData.comparePassword(req.body.password))) {
+    createSendResToken(userData, 200, res);
+  } else {
+    res.status(400);
+    throw new Error("Invalid User");
+  }
+});
+
+export const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+
+  if (user) {
+    return res.status(200).json({
+      user,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+export const logoutUser = async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+
+  res.status(200).json({
+    message: "Logout Successful",
+  });
+};
