@@ -11,11 +11,27 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 
 export const allProduct = asyncHandler(async (req, res) => {
-  res.send("View All Product");
+  const data = await Product.find();
+
+  res.status(200).json({
+    message: "View all products succesful",
+    data,
+  });
 });
 
 export const detailProduct = asyncHandler(async (req, res) => {
-  res.send("View Detail Product");
+  const paramsId = req.params.id;
+  const productData = await Product.findById(paramsId);
+
+  if (!productData) {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+
+  return res.status(200).json({
+    message: "View detail product succesful",
+    data: productData,
+  });
 });
 
 export const updateProduct = asyncHandler(async (req, res) => {
