@@ -29,14 +29,17 @@ router.get("/:id", detailProduct);
 
 // Update Data Product
 // put /api/v1/product/:id
+// middleware owner
 router.put("/:id", updateProduct);
 
 // Delete Data Product
 // delete /api/v1/product/:id
+// middleware owner
 router.delete("/:id", deleteProduct);
 
 // File Upload Data Product
 // post /api/v1/product/file-upload
+// middleware owner
 router.post("/file-upload", fileUpload);
 
 export default router;
