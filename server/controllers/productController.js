@@ -11,11 +11,44 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 
 export const allProduct = asyncHandler(async (req, res) => {
-  const data = await Product.find();
+  // Req Query
+  const queryObj = { ...req.query };
+
+  // Function that ignores page and limit parameters when requested.
+  const excludeField = ["page", "limit", "name"];
+  excludeField.forEach((element) => delete queryObj[element]);
+
+  let query;
+
+  if (req.query.name) {
+    query = Product.find({
+      name: { $regex: req.query.name, $options: "i" },
+    });
+  } else {
+    query = Product.find(queryObj);
+  }
+
+  // Pagination
+  const page = req.query.page * 1 || 1;
+  const limitData = req.query.limit * 1 || 30;
+  const skipData = (page - 1) * limitData;
+
+  query = query.skip(skipData).limit(limitData);
+
+  let countProduct = await Product.countDocuments();
+  if (req.query.page) {
+    if (skipData >= countProduct) {
+      res.status(404);
+      throw new Error("This page doesn't exist");
+    }
+  }
+
+  const data = await query;
 
   res.status(200).json({
     message: "View all products succesful",
     data,
+    count: countProduct,
   });
 });
 
