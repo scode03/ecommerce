@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 
 import authRouter from "./routes/authRouter.js";
 import productRouter from "./routes/productRouter.js";
+import orderRouter from "./routes/orderRouter.js";
+
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 dotenv.config();
@@ -21,6 +23,7 @@ app.use(express.static("./public"));
 // Parent Router
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/order", orderRouter);
 app.use(notFound);
 app.use(errorHandler);
 
