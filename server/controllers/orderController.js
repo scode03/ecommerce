@@ -5,7 +5,7 @@ import Order from "../models/orderModel.js";
 export const CreateOrder = asyncHandler(async (req, res) => {
   const { email, firstName, lastName, phone, cartItem } = req.body;
 
-  if (!cartItem || cartItem.length < 0) {
+  if (!cartItem || cartItem.length < 1) {
     res.status(400);
     throw new Error("Cart is empty!");
   }
@@ -50,19 +50,34 @@ export const CreateOrder = asyncHandler(async (req, res) => {
 });
 
 export const ViewAllOrder = asyncHandler(async (req, res) => {
+  const orders = await Order.find();
+
   res.status(200).json({
+    data: orders,
     message: "View order product succesful",
   });
 });
 
 export const DetailOrder = asyncHandler(async (req, res) => {
+  const paramsId = req.params.id;
+  const orderDetail = await Order.findById(paramsId);
+
+  if (!orderDetail) {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+
   res.status(200).json({
+    data: orderDetail,
     message: "View detail order product succesful",
   });
 });
 
 export const CurrentUserOrder = asyncHandler(async (req, res) => {
+  const userOrder = await Order.find({ user: req.user.id });
+
   res.status(200).json({
-    message: "View user current order product succesful",
+    data: userOrder,
+    message: "View order product by user succesful",
   });
 });
