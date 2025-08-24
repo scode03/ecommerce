@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 
 import authRouter from "./routes/authRouter.js";
 import productRouter from "./routes/productRouter.js";
@@ -17,6 +18,7 @@ const port = 3000;
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./public"));
 
